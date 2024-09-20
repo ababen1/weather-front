@@ -3,10 +3,10 @@ export interface Coordinates {
     longitude: number
 }
 export interface WeatherData {
-    coordinates: Coordinates,
+    time: Date,
     temperature: number,
     humidity: number,
-    windSpeed: number,
+    wind_speed: number,
     rain: number,
     snowfall: number,
   }

@@ -4,10 +4,11 @@ import { Coordinates } from '../../types/weather-types';
 
 interface Props {
     cords: Coordinates,
-    setCords: (val: Coordinates) => void
+    setCords: (val: Coordinates) => void,
+    isEditable?: boolean
 }
 
-const CordsInput: React.FC<Props> = ({ cords, setCords }) => {
+const CordsInput: React.FC<Props> = ({ cords, setCords, isEditable = true }) => {
     const onCordsChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const newValue = e.target.value;
         let newLatitude = e.target.id === "latitude" ? parseFloat(newValue) : cords.latitude
@@ -23,6 +24,7 @@ const CordsInput: React.FC<Props> = ({ cords, setCords }) => {
                     type='number'
                     label="Latitude"
                     id="latitude"
+                    disabled={!isEditable}
                     variant="outlined"
                     value={`${cords.latitude}`}
                     onChange={onCordsChanged} />
@@ -32,6 +34,7 @@ const CordsInput: React.FC<Props> = ({ cords, setCords }) => {
                     type='number'
                     label="Longitude"
                     id="longitude"
+                    disabled={!isEditable}
                     variant="outlined"
                     value={`${cords.longitude}`}
                     onChange={onCordsChanged} />

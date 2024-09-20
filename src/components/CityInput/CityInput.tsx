@@ -14,7 +14,8 @@ const CityInput: React.FC<Props> = ({ city, setCity }) => {
             label="Enter a city"
             fullWidth
             value={city}
-            onChange={(e) => setCity(e.target.value)}></TextField>
+            onChange={(e) => setCity(e.target.value)}
+            error={city.length <= 1}></TextField>
     );
 };
 
