@@ -1,6 +1,6 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Autocomplete, Container, FilterOptionsState, FormControl, Grid2, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { City, ICity } from 'country-state-city';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 interface Props {
@@ -8,33 +8,13 @@ interface Props {
     setCity: (val: string) => void
 }
 
-const cities: ICity[] = City.getAllCities()
-const memoizedCities = React.useMemo(() => (
-    cities.map((val: ICity, idx: number) => (
-      <MenuItem key={idx} value={val.name}>
-        {val.name}
-      </MenuItem>
-    ))
-  ), []);
-
 const CityInput: React.FC<Props> = ({ city, setCity }) => {
-    const onCityChanged = (e: SelectChangeEvent) => {
-        setCity(e.target.value)
-    }
-
     return (
-        <FormControl fullWidth>
-            <InputLabel id="city-select">City</InputLabel>
-            <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={city}
-                label="Age"
-                onChange={onCityChanged}
-            >
-                {memoizedCities}
-            </Select>
-        </FormControl>
+        <TextField
+            label="Enter a city"
+            fullWidth
+            value={city}
+            onChange={(e) => setCity(e.target.value)}></TextField>
     );
 };
 

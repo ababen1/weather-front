@@ -19,7 +19,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
 
     const renderInputField = () => {
         if (inputMethod == "cords") {
-            return <CordsInput latitude={0} longitude={0} />
+            return <CordsInput cords={cords} setCords={setCords} />
         } else if (inputMethod == "city") {
             return <CityInput city={city} setCity={setCity} />
         } else if (inputMethod == "location") {
@@ -32,19 +32,19 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     }
 
     return (
-        <Container>
-            <Grid2 container direction={"column"} alignItems={"center"} justifySelf={"center"}>
-                <FormControl>
-                    <FormLabel>Select input method:</FormLabel>
-                    <RadioGroup row={true} defaultValue={"cords"} onChange={onInputMethodSelected}>
-                        <FormControlLabel value="cords" control={<Radio />} label="Coordinates" />
-                        <FormControlLabel value="city" control={<Radio />} label="City" />
-                        <FormControlLabel value="location" control={<Radio />} label="Use my location" />
-                    </RadioGroup>
-                </FormControl>
+        <Grid2 container direction={"column"} alignItems={"center"}>
+            <FormControl>
+                <FormLabel>Select input method:</FormLabel>
+                <RadioGroup row={true} defaultValue={"cords"} onChange={onInputMethodSelected}>
+                    <FormControlLabel value="cords" control={<Radio />} label="Coordinates" />
+                    <FormControlLabel value="city" control={<Radio />} label="City" />
+                    <FormControlLabel value="location" control={<Radio />} label="Use my location" />
+                </RadioGroup>
+            </FormControl>
+            <Grid2>
                 {renderInputField()}
             </Grid2>
-        </Container>
+        </Grid2>
     );
 };
 
