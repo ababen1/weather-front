@@ -1,10 +1,11 @@
-import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid2, Radio, RadioGroup, Stack } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid2, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import CordsInput from '../components/CordsInput/CordsInput';
 import CityInput from '../components/CityInput/CityInput';
 import { Coordinates, WeatherData } from '../types/weather-types';
 import { fetchWeather } from '../util/WeatherService';
 import WeatherCard from '../components/WeatherCard/WeatherCard';
+import { City } from 'country-state-city';
 
 type InputMethod = "cords" | "city" | "location";
 
@@ -18,6 +19,13 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     const [cords, setCords] = useState<Coordinates>({ "latitude": 0, "longitude": 0 })
     const [weatherData, setWeatherData] = useState<WeatherData[]>([])
     const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(false)
+    const [daysToShow, setDaysToShow] = useState<number>(7)
+
+    // Clear fields when input method changes
+    useEffect(() => {
+        setCity("")
+        setCords({ "latitude": 0, "longitude": 0 })
+    }, [inputMethod])
 
     const loadWeather = async () => {
         setIsLoadingWeather(true)
@@ -47,7 +55,37 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     }
 
     const renderWeatherData = () => {
-        return
+        if (weatherData.length == 0) {
+            return ''
+        }
+        return <div>
+            <FormControl size='small'>
+                <Stack direction={'row'} alignItems={"center"} gap={1}>
+                    <span>Show</span>
+                    <Select
+                        value={daysToShow}
+                        onChange={(e) => { setDaysToShow(parseInt(e.target.value as string)) }}
+                    >
+                        <MenuItem value={7}>7</MenuItem>
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={1}>1</MenuItem>
+                    </Select>
+                    <span>Days</span>
+                </Stack>
+            </FormControl>
+            <Stack direction={'row'} gap={1}>
+                {
+                    weatherData.map((val: WeatherData, key: number, arr) => {
+                        if (key < daysToShow) {
+                            return <WeatherCard key={key} weatherData={val}></WeatherCard>
+                        } else {
+                            return ''
+                        }
+
+                    })
+                }
+            </Stack>
+        </div>
     }
 
     const onInputMethodSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +93,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     }
 
     return (
-        <Grid2 container direction={"column"} alignItems={"center"}>
+        <Grid2 container direction={"column"} alignItems={"center"} gap={3}>
             <FormControl>
                 <FormLabel>Select input method:</FormLabel>
                 <RadioGroup row={true} defaultValue={"cords"} onChange={onInputMethodSelected}>
@@ -77,14 +115,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
 
             </Grid2>
 
-            <Stack direction={'row'} gap={1}>
-                {
-                    weatherData.map((val: WeatherData, key: number) => {
-                        return <WeatherCard key={key} weatherData={val}></WeatherCard>
-
-                    })
-                }
-            </Stack>
+            {renderWeatherData()}
         </Grid2>
     );
 };
