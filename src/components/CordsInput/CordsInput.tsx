@@ -11,10 +11,10 @@ const CordsInput: React.FC<Props> = ({ latitude = 0, longitude = 0 }) => {
 
     return (
         <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-            <Grid2 size={3}>
+            <Grid2>
                 <TextField label="Latitude" variant="outlined" value={latitude} />
             </Grid2>
-            <Grid2 size={3}>
+            <Grid2>
                 <TextField label="Longitude" variant="outlined" value={longitude} />
             </Grid2>
         </Grid2>

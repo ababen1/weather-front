@@ -10,3 +10,8 @@ export interface WeatherData {
     rain: number,
     snowfall: number,
   }
+
+  export interface WeatherRequestData {
+    coordinates?: Coordinates,
+    city?: string,
+  }
