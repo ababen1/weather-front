@@ -1,9 +1,10 @@
-import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid2, Radio, RadioGroup } from '@mui/material';
+import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid2, Radio, RadioGroup, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import CordsInput from '../components/CordsInput/CordsInput';
 import CityInput from '../components/CityInput/CityInput';
 import { Coordinates, WeatherData } from '../types/weather-types';
 import { fetchWeather } from '../util/WeatherService';
+import WeatherCard from '../components/WeatherCard/WeatherCard';
 
 type InputMethod = "cords" | "city" | "location";
 
@@ -12,8 +13,6 @@ interface Props {
 }
 
 const WeatherPage: React.FC<Props> = ({ }) => {
-    // Add your component logic here, like state, effects, etc.
-
     const [inputMethod, setInputMethod] = useState<InputMethod>("cords")
     const [city, setCity] = useState<string>("")
     const [cords, setCords] = useState<Coordinates>({ "latitude": 0, "longitude": 0 })
@@ -22,6 +21,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
 
     const loadWeather = async () => {
         setIsLoadingWeather(true)
+        setWeatherData([])
         const result = await fetchWeather({ city: city, coordinates: cords })
         setIsLoadingWeather(false)
         setWeatherData(result)
@@ -47,7 +47,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     }
 
     const renderWeatherData = () => {
-        return <div></div>
+        return
     }
 
     const onInputMethodSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,9 +77,14 @@ const WeatherPage: React.FC<Props> = ({ }) => {
 
             </Grid2>
 
-            <Grid2>
-                {renderWeatherData()}
-            </Grid2>
+            <Stack direction={'row'} gap={1}>
+                {
+                    weatherData.map((val: WeatherData, key: number) => {
+                        return <WeatherCard key={key} weatherData={val}></WeatherCard>
+
+                    })
+                }
+            </Stack>
         </Grid2>
     );
 };
