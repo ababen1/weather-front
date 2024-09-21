@@ -1,11 +1,12 @@
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid2, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CordsInput from '../components/CordsInput/CordsInput';
 import CityInput from '../components/CityInput/CityInput';
 import { Coordinates, WeatherData } from '../types/weather-types';
 import { fetchWeather } from '../util/WeatherService';
 import WeatherCard from '../components/WeatherCard/WeatherCard';
 import { City } from 'country-state-city';
+import WeatherDataContext from '../context/WeatherDataContext';
 
 type InputMethod = "cords" | "city" | "location";
 
@@ -17,7 +18,10 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     const [inputMethod, setInputMethod] = useState<InputMethod>("cords")
     const [city, setCity] = useState<string>("")
     const [cords, setCords] = useState<Coordinates>({ "latitude": 0, "longitude": 0 })
-    const [weatherData, setWeatherData] = useState<WeatherData[]>([])
+    
+    const weatherData = useContext(WeatherDataContext).weatherData;
+    const setWeatherData = useContext(WeatherDataContext).setWeatherData;
+    
     const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(false)
     const [daysToShow, setDaysToShow] = useState<number>(7)
 

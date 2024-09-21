@@ -1,15 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import WeatherPage from './pages/WeatherPage';
 import { Box, Button, createTheme, ThemeProvider } from '@mui/material';
 import { CurrentThemeContext, CurrentThemeProvider, darkTheme } from './context/CurrentThemeContext';
 import ThemeToggleButton from './components/ThemeToggleButton/ThemeToggleButton';
+import { WeatherData } from './types/weather-types';
+import WeatherDataContext from './context/WeatherDataContext';
 
 
 
 function App() {
   const { theme } = useContext(CurrentThemeContext);
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([])
+
   return (
     <CurrentThemeProvider>
       <Box sx={{
@@ -21,7 +25,9 @@ function App() {
         <ThemeToggleButton />
         <div className="App">
           <h1>Weather App</h1>
-          <WeatherPage />
+          <WeatherDataContext.Provider value={{weatherData: weatherData, setWeatherData: setWeatherData}}>
+            <WeatherPage />
+          </WeatherDataContext.Provider>
         </div>
       </Box>
     </CurrentThemeProvider>
