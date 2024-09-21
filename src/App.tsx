@@ -7,6 +7,7 @@ import { CurrentThemeContext, CurrentThemeProvider, darkTheme } from './context/
 import ThemeToggleButton from './components/ThemeToggleButton/ThemeToggleButton';
 import { WeatherData } from './types/weather-types';
 import WeatherDataContext from './context/WeatherDataContext';
+import { InputProvider } from './context/InputContext';
 
 
 
@@ -25,8 +26,10 @@ function App() {
         <ThemeToggleButton />
         <div className="App">
           <h1>Weather App</h1>
-          <WeatherDataContext.Provider value={{weatherData: weatherData, setWeatherData: setWeatherData}}>
-            <WeatherPage />
+          <WeatherDataContext.Provider value={{ weatherData: weatherData, setWeatherData: setWeatherData }}>
+            <InputProvider>
+              <WeatherPage />
+            </InputProvider>
           </WeatherDataContext.Provider>
         </div>
       </Box>

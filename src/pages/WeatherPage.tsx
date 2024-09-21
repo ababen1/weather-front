@@ -7,6 +7,7 @@ import { fetchWeather } from '../util/WeatherService';
 import WeatherCard from '../components/WeatherCard/WeatherCard';
 import { City } from 'country-state-city';
 import WeatherDataContext from '../context/WeatherDataContext';
+import InputContext from '../context/InputContext';
 
 type InputMethod = "cords" | "city" | "location";
 
@@ -15,10 +16,9 @@ interface Props {
 }
 
 const WeatherPage: React.FC<Props> = ({ }) => {
-    const [inputMethod, setInputMethod] = useState<InputMethod>("cords")
-    const [city, setCity] = useState<string>("")
-    const [cords, setCords] = useState<Coordinates>({ "latitude": 0, "longitude": 0 })
-
+    const {inputMethod, setInputMethod} = useContext(InputContext)
+    const {city, setCity} = useContext(InputContext)
+    const {cords, setCords} = useContext(InputContext)
     const {weatherData, setWeatherData} = useContext(WeatherDataContext);
     
     const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(false)
