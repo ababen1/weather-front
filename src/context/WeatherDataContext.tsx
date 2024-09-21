@@ -8,7 +8,17 @@ interface IWeatherDataContext {
 
 export const WeatherDataContext = createContext<IWeatherDataContext>({
     weatherData: [],
-    setWeatherData: () => {}
+    setWeatherData: () => { }
 });
+
+export const WeatherDataProvider = ({ children }: { children: ReactNode }) => {
+    const [weatherData, setWeatherData] = useState<WeatherData[]>([])
+
+    return (
+        <WeatherDataContext.Provider value={{ weatherData: weatherData, setWeatherData: setWeatherData }}>
+            {children}
+        </WeatherDataContext.Provider>
+    )
+}
 
 export default WeatherDataContext

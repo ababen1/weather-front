@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from 'react';
-import { Coordinates, WeatherData } from '../types/weather-types';
+import { Coordinates } from '../types/weather-types';
 
 type InputMethod = "cords" | "city" | "location";
 
