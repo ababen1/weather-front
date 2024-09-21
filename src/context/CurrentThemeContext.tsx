@@ -56,7 +56,6 @@ interface ICurrentThemeContext {
   
     return (
       <CurrentThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
-        {/* Provide the current theme to the rest of the app */}
         <ThemeProvider theme={currentTheme}>
           {children}
         </ThemeProvider>

@@ -18,9 +18,8 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     const [inputMethod, setInputMethod] = useState<InputMethod>("cords")
     const [city, setCity] = useState<string>("")
     const [cords, setCords] = useState<Coordinates>({ "latitude": 0, "longitude": 0 })
-    
-    const weatherData = useContext(WeatherDataContext).weatherData;
-    const setWeatherData = useContext(WeatherDataContext).setWeatherData;
+
+    const {weatherData, setWeatherData} = useContext(WeatherDataContext);
     
     const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(false)
     const [daysToShow, setDaysToShow] = useState<number>(7)
