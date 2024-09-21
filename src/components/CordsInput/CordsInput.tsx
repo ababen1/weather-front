@@ -1,20 +1,19 @@
 import { Container, Grid2, TextField } from '@mui/material';
-import React, { ChangeEvent, ChangeEventHandler } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, useContext, useState } from 'react';
 import { Coordinates } from '../../types/weather-types';
+import InputContext from '../../context/InputContext';
 
 interface Props {
-    cords: Coordinates,
-    setCords: (val: Coordinates) => void,
     isEditable?: boolean
 }
 
-const CordsInput: React.FC<Props> = ({ cords, setCords, isEditable = true }) => {
+const CordsInput: React.FC<Props> = ({ isEditable = true }) => {
+    const {cords, setCords} = useContext(InputContext);
     const onCordsChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const newValue = e.target.value;
         let newLatitude = e.target.id === "latitude" ? parseFloat(newValue) : cords.latitude
         let newLongitude = e.target.id === "longitude" ? parseFloat(newValue) : cords.longitude
         setCords({ "latitude": newLatitude, "longitude": newLongitude })
-
     }
 
     return (

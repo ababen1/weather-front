@@ -1,13 +1,19 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { WeatherRequestData, WeatherData } from "../types/weather-types";
 
 const URL_DEV = "http://localhost:8000/"
 const URL_PROD = ""
 
-export const fetchWeather = async(data: WeatherRequestData): Promise<WeatherData[]>  =>{
-    
-    let url: string 
-    let weather: WeatherData[] = []
+interface WeatherResponse {
+    success: boolean,
+    weatherData: WeatherData[],
+    errorMessage: string
+}
+
+export const fetchWeather = async (data: WeatherRequestData): Promise<WeatherResponse> => {
+
+    let url: string
+    let results: WeatherResponse = { success: false, weatherData: [] , errorMessage: ""}
 
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         url = URL_DEV
@@ -18,18 +24,26 @@ export const fetchWeather = async(data: WeatherRequestData): Promise<WeatherData
     url += "weather/"
 
     try {
-        const response: AxiosResponse = await axios.post(url, data, {
+        const response: AxiosResponse<WeatherData[]> = await axios.post(url, data, {
             "headers": {
                 "X-CSRFToken": getCSRFToken()
             }
         })
-        weather = response.data
+        if (response.status == 200) {
+            results.weatherData = response.data
+            results.success = true
+        }
 
-    } catch (error) {
-        console.log(error)
+    } catch (e: any) {
+        if (e.response && e.response.data) {
+            results.errorMessage = e.response.data.error;
+        } else {
+            results.errorMessage = "An unknown error occurred.";
+        }
+        console.log(e)
     }
 
-    return weather
+    return results
 }
 
 function getCSRFToken() {

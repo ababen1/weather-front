@@ -1,11 +1,10 @@
-import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid2, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { Button, FormControl, FormControlLabel, FormLabel, Grid2, MenuItem, Radio, RadioGroup, Select, Stack } from '@mui/material';
+import React, { useContext, useState } from 'react';
 import CordsInput from '../components/CordsInput/CordsInput';
 import CityInput from '../components/CityInput/CityInput';
-import { Coordinates, WeatherData } from '../types/weather-types';
+import { WeatherData } from '../types/weather-types';
 import { fetchWeather } from '../util/WeatherService';
 import WeatherCard from '../components/WeatherCard/WeatherCard';
-import { City } from 'country-state-city';
 import WeatherDataContext from '../context/WeatherDataContext';
 import InputContext from '../context/InputContext';
 
@@ -20,46 +19,36 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     const {city, setCity} = useContext(InputContext)
     const {cords, setCords} = useContext(InputContext)
     const {weatherData, setWeatherData} = useContext(WeatherDataContext);
-    
+    const {currentError, setCurrentError} = useContext(InputContext)
     const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(false)
     const [daysToShow, setDaysToShow] = useState<number>(7)
-
-    // Clear fields when input method changes
-    useEffect(() => {
-        setCity("")
-        setCords({ "latitude": 0, "longitude": 0 })
-    }, [inputMethod])
 
     const loadWeather = async () => {
         setIsLoadingWeather(true)
         setWeatherData([])
         const result = await fetchWeather({ city: city, coordinates: cords })
         setIsLoadingWeather(false)
-        setWeatherData(result)
-    }
-
-    const locateUser = () => {
-        navigator.geolocation.getCurrentPosition((pos: GeolocationPosition) => {
-            setCords({ "latitude": pos.coords.latitude, "longitude": pos.coords.longitude })
-        }, (err: GeolocationPositionError) => {
-            alert(err.message)
-        })
+        setWeatherData(result.weatherData)
+        setCurrentError(result.errorMessage)
     }
 
     const renderInputField = () => {
         if (inputMethod == "cords") {
-            return <CordsInput cords={cords} setCords={setCords} />
+            return <CordsInput />
         } else if (inputMethod == "city") {
             return <CityInput city={city} setCity={setCity} />
         } else if (inputMethod == "location") {
-            locateUser()
-            return <CordsInput cords={cords} setCords={setCords} isEditable={false} />
+            return <CordsInput isEditable={false} />
         }
     }
 
     const renderWeatherData = () => {
         if (weatherData.length == 0) {
-            return ''
+            if (currentError && currentError != "") {
+                return <span style={{color: "red"}}>{currentError}</span>
+            } else {
+                return ''
+            }
         }
         return <div>
             <FormControl size='small'>
@@ -111,7 +100,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
             <Grid2>
                 <Button
                     variant="contained"
-                    disabled={isLoadingWeather}
+                    disabled={(isLoadingWeather || currentError != "" )}
                     onClick={loadWeather}>
                     {isLoadingWeather ? "Loading..." : "Submit"}
                 </Button>
