@@ -15,11 +15,11 @@ interface Props {
 }
 
 const WeatherPage: React.FC<Props> = ({ }) => {
-    const {inputMethod, setInputMethod} = useContext(InputContext)
-    const {city, setCity} = useContext(InputContext)
-    const {cords, setCords} = useContext(InputContext)
-    const {weatherData, setWeatherData} = useContext(WeatherDataContext);
-    const {currentError, setCurrentError} = useContext(InputContext)
+    const { inputMethod, setInputMethod } = useContext(InputContext)
+    const { city, setCity } = useContext(InputContext)
+    const { cords, setCords } = useContext(InputContext)
+    const { weatherData, setWeatherData } = useContext(WeatherDataContext);
+    const { currentError, setCurrentError } = useContext(InputContext)
     const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(false)
     const [daysToShow, setDaysToShow] = useState<number>(7)
 
@@ -45,12 +45,12 @@ const WeatherPage: React.FC<Props> = ({ }) => {
     const renderWeatherData = () => {
         if (weatherData.length == 0) {
             if (currentError && currentError != "") {
-                return <span style={{color: "red"}}>{currentError}</span>
+                return <span style={{ color: "red" }}>{currentError}</span>
             } else {
                 return ''
             }
         }
-        return <div>
+        return <Grid2>
             <FormControl size='small'>
                 <Stack direction={'row'} alignItems={"center"} gap={1}>
                     <span>Show</span>
@@ -65,7 +65,9 @@ const WeatherPage: React.FC<Props> = ({ }) => {
                     <span>Days</span>
                 </Stack>
             </FormControl>
-            <Stack direction={'row'} gap={1}>
+            <Stack 
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 1, sm: 1, md: 1 }}>
                 {
                     weatherData.map((val: WeatherData, key: number, arr) => {
                         if (key < daysToShow) {
@@ -77,7 +79,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
                     })
                 }
             </Stack>
-        </div>
+        </Grid2>
     }
 
     const onInputMethodSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +102,7 @@ const WeatherPage: React.FC<Props> = ({ }) => {
             <Grid2>
                 <Button
                     variant="contained"
-                    disabled={(isLoadingWeather || currentError != "" )}
+                    disabled={(isLoadingWeather || currentError != "")}
                     onClick={loadWeather}>
                     {isLoadingWeather ? "Loading..." : "Submit"}
                 </Button>

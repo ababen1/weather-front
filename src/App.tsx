@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import './App.css';
 import WeatherPage from './pages/WeatherPage';
-import { Box } from '@mui/material';
+import { Box, Container, Grid2, Typography } from '@mui/material';
 import { CurrentThemeContext, CurrentThemeProvider } from './context/CurrentThemeContext';
 import ThemeToggleButton from './components/ThemeToggleButton/ThemeToggleButton';
 import { WeatherDataProvider } from './context/WeatherDataContext';
@@ -13,22 +13,24 @@ function App() {
   const { theme } = useContext(CurrentThemeContext);
   return (
     <CurrentThemeProvider>
-      <Box sx={{
+      <Grid2 sx={{
         bgcolor: 'background.default',
         color: 'text.primary',
-        minHeight: '100vh', // Ensure it takes the full screen height
-        padding: 2
+        padding: 2,
+        minHeight: '100vh',
+        minWidth: '100%'
+        
       }}>
         <ThemeToggleButton />
         <div className="App">
-          <h1>Weather App</h1>
+          <Typography variant='h4' >The Weather App</Typography>
           <WeatherDataProvider>
             <InputProvider>
               <WeatherPage />
             </InputProvider>
           </WeatherDataProvider>
         </div>
-      </Box>
+      </Grid2>
     </CurrentThemeProvider>
   );
 }
